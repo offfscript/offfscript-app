@@ -56,9 +56,25 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       padding: 0.1em 0.2em;
-      display: inline-block;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.5rem;
       line-height: 1;
     }
+
+    .topbar-descriptor {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-style: normal;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: none;
+      -webkit-text-fill-color: var(--muted);
+      color: var(--muted);
+      opacity: 0.7;
+    }
+    @media (max-width: 480px) { .topbar-descriptor { display: none; } }
 
     .btn-signout {
       font-size: 0.75rem;
@@ -532,14 +548,14 @@
 
   <!-- Top bar (authenticated) -->
   <header class="topbar" id="topbar">
-    <span class="topbar-wordmark">offfscript</span>
+    <span class="topbar-wordmark">offfscript <span class="topbar-descriptor">creator monetization & growth</span></span>
     <button class="btn-signout" onclick="signOut()">Sign out</button>
   </header>
 
   <!-- Logged-out view -->
   <div class="login-layout" id="loginView">
     <header class="topbar" style="display:flex;">
-      <a href="index.html" class="topbar-wordmark" style="text-decoration:none;">offfscript</a>
+      <a href="index.html" class="topbar-wordmark" style="text-decoration:none;">offfscript <span class="topbar-descriptor">creator monetization & growth</span></a>
     </header>
 
     <div class="login-card" style="margin-top:56px;">

@@ -55,9 +55,23 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       padding: 0.1em 0.2em;
-      display: inline-block;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.5rem;
       line-height: 1;
     }
+    .topbar-descriptor {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-style: normal;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: none;
+      -webkit-text-fill-color: rgba(255,255,255,0.35);
+      color: rgba(255,255,255,0.35);
+    }
+    @media (max-width: 480px) { .topbar-descriptor { display: none; } }
 
     .btn-signout {
       font-size: 0.75rem;
@@ -352,7 +366,7 @@
 <body>
 
   <header class="topbar">
-    <a href="index.html" class="topbar-wordmark" style="text-decoration:none;">offfscript</a>
+    <a href="index.html" class="topbar-wordmark" style="text-decoration:none;">offfscript <span class="topbar-descriptor">creator monetization & growth</span></a>
     <a href="index.html" class="btn-signout">Sign out</a>
   </header>
 
