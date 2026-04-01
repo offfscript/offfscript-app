@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get on @joyraftdc's Instagram story — offfscript</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=League+Gothic:ital@0;1&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0b0b12;
+      --surface: rgba(255,255,255,0.04);
+      --surface-hover: rgba(255,255,255,0.07);
+      --text: #f0f0f0;
+      --muted: rgba(240,240,240,0.45);
+      --border: rgba(255,255,255,0.08);
+      --gradient: linear-gradient(90deg, #9B5CF6, #EC4899, #FF6B35);
+      --pink: #EC4899;
+      --purple: #9B5CF6;
+      --orange: #FF6B35;
+      --radius: 14px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100svh;
+      padding-bottom: 80px;
+    }
+
+    /* ── Top bar ── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 52px;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(11,11,18,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .topbar-wordmark {
+      font-family: 'League Gothic', Impact, sans-serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 1.35rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      padding: 0.15em 0.25em;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.45rem;
+      line-height: 1;
+      text-decoration: none;
+    }
+    .topbar-descriptor {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-style: normal;
+      font-size: 0.58rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .topbar-cta {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.4rem 0.85rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .topbar-cta:hover { background: rgba(255,255,255,0.12); }
+
+    /* ── Container ── */
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 80px 0 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-eyebrow {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .hero-title {
+      font-family: 'League Gothic', Impact, sans-serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(2.4rem, 7vw, 4rem);
+      line-height: 1.05;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      padding: 0.2em 0;
+      margin-bottom: 0.5rem;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+      display: inline-block;
+    }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1.75rem;
+      max-width: 520px;
+    }
+
+    /* ── Creator pill ── */
+    .creator-card {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.875rem 1.1rem;
+      width: fit-content;
+    }
+    .creator-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid transparent;
+      background: linear-gradient(var(--bg), var(--bg)) padding-box,
+                  var(--gradient) border-box;
+      flex-shrink: 0;
+    }
+    .creator-handle {
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 0.15rem;
+    }
+    .creator-stats {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .creator-stats span {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* ── Section ── */
+    .section {
+      padding: 2.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: 'League Gothic', Impact, sans-serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      line-height: 1.1;
+      margin-bottom: 0.75rem;
+    }
+    .section-body {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 560px;
+    }
+
+    /* ── Steps ── */
+    .steps { display: flex; flex-direction: column; gap: 0; margin-top: 1.5rem; }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.1rem 0;
+      border-top: 1px solid var(--border);
+    }
+    .step:last-child { border-bottom: 1px solid var(--border); }
+    .step-num {
+      font-family: 'League Gothic', Impact, sans-serif;
+      font-style: italic;
+      font-size: 1.4rem;
+      font-weight: 400;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      padding: 0.1em 0;
+      flex-shrink: 0;
+      width: 28px;
+      line-height: 1.3;
+    }
+    .step-content { flex: 1; }
+    .step-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.2rem;
+    }
+    .step-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+    /* ── Phone mockup ── */
+    .phone-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+    .phone {
+      width: 200px;
+      border-radius: 32px;
+      background: #0d0d14;
+      border: 2px solid rgba(255,255,255,0.12);
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);
+      position: relative;
+    }
+    .phone-notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 8px;
+      background: #000;
+      border-radius: 4px;
+      z-index: 2;
+    }
+    .phone-screen {
+      aspect-ratio: 9/16;
+      background: linear-gradient(160deg, #1a0030, #0d001a, #0b0b12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      position: relative;
+    }
+    .phone-story-bar {
+      position: absolute;
+      top: 22px;
+      left: 8px; right: 8px;
+      height: 2px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.15);
+      overflow: hidden;
+    }
+    .phone-story-bar::after {
+      content: '';
+      display: block;
+      width: 40%;
+      height: 100%;
+      background: white;
+      border-radius: 2px;
+    }
+    .phone-ig-header {
+      position: absolute;
+      top: 30px;
+      left: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .phone-avatar-sm {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid white;
+      object-fit: cover;
+    }
+    .phone-username-sm {
+      font-size: 0.55rem;
+      font-weight: 600;
+      color: white;
+    }
+    .phone-creative {
+      text-align: center;
+    }
+    .phone-creative-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 0.5rem;
+    }
+    .phone-creative-text {
+      font-family: 'League Gothic', Impact, sans-serif;
+      font-style: italic;
+      font-size: 2rem;
+      font-weight: 400;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      padding: 0.1em 0;
+      line-height: 1;
+    }
+    .phone-actions {
+      position: absolute;
+      bottom: 16px;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: space-around;
+      padding: 0 12px;
+    }
+    .phone-action-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* ── IG profile card ── */
+    .ig-card {
+      background: #111118;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-top: 1.5rem;
+    }
+    .ig-card-header {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .ig-card-logo {
+      font-style: italic;
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: white;
+      font-family: Georgia, serif;
+    }
+    .ig-profile {
+      padding: 1rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .ig-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 2px solid transparent;
+      background: linear-gradient(var(--bg), var(--bg)) padding-box,
+                  conic-gradient(#f9ce34, #ee2a7b, #6228d7) border-box;
+    }
+    .ig-meta { flex: 1; }
+    .ig-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.35rem; }
+    .ig-stats { display: flex; gap: 1.5rem; margin-bottom: 0.5rem; }
+    .ig-stat { text-align: center; }
+    .ig-stat-num { font-weight: 700; font-size: 0.85rem; }
+    .ig-stat-label { font-size: 0.7rem; color: var(--muted); }
+    .ig-bio { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+
+    /* ── Stats grid ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-top: 1.5rem;
+    }
+    .stat-cell {
+      background: var(--surface);
+      padding: 1.25rem 1rem;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'League Gothic', Impact, sans-serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 2rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      padding: 0.1em 0;
+      line-height: 1.1;
+      display: block;
+    }
+    .stat-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ── Sample stories ── */
+    .stories-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    .story-phone {
+      border-radius: 20px;
+      background: #111118;
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+      aspect-ratio: 9/16;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .story-ph-label {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.15);
+      text-align: center;
+      padding: 0 0.75rem;
+    }
+    .story-ph-label span {
+      display: block;
+      font-family: 'League Gothic', Impact, sans-serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      padding: 0.1em 0;
+      margin-top: 0.25rem;
+    }
+    .story-bar-top {
+      position: absolute;
+      top: 8px; left: 6px; right: 6px;
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+    }
+    .story-bar-top::after {
+      content: '';
+      display: block;
+      height: 100%;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.5);
+    }
+    .story-bar-top.s1::after { width: 35%; }
+    .story-bar-top.s2::after { width: 60%; }
+    .story-bar-top.s3::after { width: 20%; }
+
+    /* ── Sticky CTA ── */
+    .sticky-cta {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      padding: 0.875rem 1.25rem;
+      background: rgba(11,11,18,0.96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      z-index: 99;
+    }
+    .cta-price {
+      font-size: 1.5rem;
+      font-family: 'League Gothic', Impact, sans-serif;
+      font-style: italic;
+      font-weight: 400;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      padding: 0.1em 0;
+      line-height: 1;
+    }
+    .cta-price-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+    .btn-checkout {
+      background: var(--gradient);
+      background-size: 200%;
+      color: white;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: none;
+      border-radius: 12px;
+      padding: 0.75rem 2rem;
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: 0.01em;
+      text-decoration: none;
+      display: inline-block;
+      transition: opacity 0.15s;
+      white-space: nowrap;
+    }
+    .btn-checkout:hover { opacity: 0.88; }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .stories-grid { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+      .section-title { font-size: 1.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <nav class="topbar">
+    <a href="/" class="topbar-wordmark">
+      offfscript
+      <span class="topbar-descriptor">creator monetization &amp; growth</span>
+    </a>
+    <a href="https://offfscript-app.vercel.app/" class="topbar-cta">Sign in</a>
+  </nav>
+
+  <div class="container">
+
+    <!-- Hero -->
+    <div class="hero">
+      <p class="hero-eyebrow">StoryDrop by offfscript</p>
+      <div class="hero-title">Get on @joyraftdc's<br>Instagram story.</div>
+      <p class="hero-sub">Reach DC's most engaged local audience — instantly. Your creative, your message, delivered as a native Instagram story.</p>
+
+      <div class="creator-card">
+        <img src="/joyraftdc-avatar.jpg" alt="@joyraftdc" class="creator-avatar">
+        <div>
+          <div class="creator-handle">@joyraftdc</div>
+          <div class="creator-stats"><span>39k+</span> followers &nbsp;·&nbsp; <span>1–2k+</span> impressions/frame*</div>
+          <div style="font-size:0.65rem;color:var(--muted);margin-top:0.15rem;">*estimates</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <div class="section">
+      <p class="section-label">How it works</p>
+      <div class="section-title">Book in 3 simple steps.</div>
+
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">01</span>
+          <div class="step-content">
+            <div class="step-title">Choose checkout</div>
+            <div class="step-desc">Select your story frame and confirm your booking. No negotiations, no back-and-forth.</div>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">02</span>
+          <div class="step-content">
+            <div class="step-title">Pick a run date &amp; time</div>
+            <div class="step-desc">Slots can start immediately. Choose when you want to go live on @joyraftdc's story.</div>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">03</span>
+          <div class="step-content">
+            <div class="step-title">Send your creative</div>
+            <div class="step-desc">Upload any media — image, video, graphic. We'll run exactly what you send.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phone demo -->
+    <div class="section">
+      <p class="section-label">What it looks like</p>
+      <div class="section-title">Native. Full screen. Unmissable.</div>
+      <p class="section-body">Your creative runs as a real Instagram story frame — same format DC locals are already watching every day.</p>
+
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-story-bar"></div>
+            <div class="phone-ig-header">
+              <img src="/joyraftdc-avatar.jpg" alt="" class="phone-avatar-sm">
+              <span class="phone-username-sm">joyraftdc</span>
+            </div>
+            <div class="phone-creative">
+              <div class="phone-creative-label">your creative here</div>
+              <div class="phone-creative-text">Your<br>Message<br>Here</div>
+            </div>
+            <div class="phone-actions">
+              <div class="phone-action-dot"></div>
+              <div class="phone-action-dot"></div>
+              <div class="phone-action-dot"></div>
+              <div class="phone-action-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Your ad your control -->
+    <div class="section">
+      <p class="section-label">Full creative control</p>
+      <div class="section-title">Your ad, your control.</div>
+      <p class="section-body">After checkout, upload your media and tell us how you want it built. We run your story on @joyraftdc — exactly as you intend it.</p>
+    </div>
+
+    <!-- IG profile + stats -->
+    <div class="section">
+      <p class="section-label">The account</p>
+      <div class="section-title">Reach one of DC's most engaged audiences.</div>
+      <p class="section-body">@joyraftdc's story averages 1.2k views per frame. A proven DC audience built around local experiences, dining, and culture.</p>
+
+      <div class="ig-card">
+        <div class="ig-card-header">
+          <span class="ig-card-logo">Instagram</span>
+        </div>
+        <div class="ig-profile">
+          <img src="/joyraftdc-avatar.jpg" alt="Joyraft DC" class="ig-avatar">
+          <div class="ig-meta">
+            <div class="ig-name">Joyraft DC</div>
+            <div class="ig-stats">
+              <div class="ig-stat">
+                <div class="ig-stat-num">616</div>
+                <div class="ig-stat-label">posts</div>
+              </div>
+              <div class="ig-stat">
+                <div class="ig-stat-num">39.1K</div>
+                <div class="ig-stat-label">followers</div>
+              </div>
+              <div class="ig-stat">
+                <div class="ig-stat-num">812</div>
+                <div class="ig-stat-label">following</div>
+              </div>
+            </div>
+            <div class="ig-bio">Fun things to do together in Washington DC<br>dc@joyraft.com · Created by <strong>@thebostoncal</strong> and <strong>@joyraft</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-cell">
+          <span class="stat-num">39k+</span>
+          <div class="stat-label">Followers</div>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-num">1.2k</span>
+          <div class="stat-label">Avg views / frame</div>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-num">DC</span>
+          <div class="stat-label">Core market</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sample stories -->
+    <div class="section">
+      <p class="section-label">Past stories</p>
+      <div class="section-title">What it looks like live.</div>
+      <p class="section-body">Real stories run for real brands and events on @joyraftdc.</p>
+
+      <div class="stories-grid">
+        <div class="story-phone">
+          <div class="story-bar-top s1"></div>
+          <div class="story-ph-label">SIZZLE-SD-01<span>Sample story</span></div>
+        </div>
+        <div class="story-phone">
+          <div class="story-bar-top s2"></div>
+          <div class="story-ph-label">SIZZLE-SD-02<span>Sample story</span></div>
+        </div>
+        <div class="story-phone">
+          <div class="story-bar-top s3"></div>
+          <div class="story-ph-label">SIZZLE-SD-03<span>Sample story</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+
+  <!-- Sticky CTA -->
+  <div class="sticky-cta">
+    <div>
+      <div class="cta-price">$50</div>
+      <div class="cta-price-label">per story frame</div>
+    </div>
+    <a href="#" class="btn-checkout">Checkout →</a>
+  </div>
+
+</body>
+</html>
