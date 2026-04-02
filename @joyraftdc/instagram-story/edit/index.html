@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit StoryDrop — @joyraftdc — offfscript</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=League+Gothic:ital@0;1&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0b0b12;
+      --surface: rgba(255,255,255,0.04);
+      --surface-hover: rgba(255,255,255,0.07);
+      --card: #111118;
+      --text: #f0f0f0;
+      --muted: rgba(240,240,240,0.45);
+      --border: rgba(255,255,255,0.08);
+      --border-focus: rgba(255,255,255,0.25);
+      --gradient: linear-gradient(90deg, #9B5CF6, #EC4899, #FF6B35);
+      --radius: 14px;
+      --radius-sm: 9px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100svh;
+      padding-bottom: 4rem;
+    }
+
+    /* ── Topbar ── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 52px;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(11,11,18,0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .topbar-wordmark {
+      font-family: 'League Gothic', Impact, sans-serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 1.35rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      padding: 0.15em 0.25em;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.45rem;
+      line-height: 1;
+      text-decoration: none;
+    }
+    .topbar-descriptor {
+      font-style: normal;
+      font-size: 0.58rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .btn-signout {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.4rem 0.85rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .btn-signout:hover { color: var(--text); border-color: var(--border-focus); }
+
+    /* ── Layout ── */
+    .page {
+      padding: 76px 1.25rem 3rem;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* ── Page header ── */
+    .page-eyebrow {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+    .page-title {
+      font-family: 'League Gothic', Impact, sans-serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 2.2rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      padding: 0.1em 0;
+      line-height: 1.05;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+    }
+    .page-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+    .card-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .card-badge {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.2rem 0.6rem;
+    }
+    .card-body { padding: 1.25rem; }
+
+    /* ── Form fields ── */
+    .field { margin-bottom: 1.1rem; }
+    .field:last-child { margin-bottom: 0; }
+    .field-label {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .field-hint {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+    .input {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.88rem;
+      padding: 0.65rem 0.9rem;
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+      -webkit-text-fill-color: var(--text);
+    }
+    .input:focus {
+      border-color: var(--border-focus);
+      background: rgba(255,255,255,0.07);
+    }
+    .input::placeholder { color: rgba(240,240,240,0.2); }
+    textarea.input {
+      resize: vertical;
+      min-height: 100px;
+      line-height: 1.5;
+      font-size: 0.82rem;
+    }
+    .input-prefix-wrap {
+      position: relative;
+    }
+    .input-prefix {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.88rem;
+      color: var(--muted);
+      pointer-events: none;
+    }
+    .input-prefix + .input { padding-left: 1.6rem; }
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      align-items: end;
+    }
+    .field-row-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+      grid-column: 1 / -1;
+    }
+    .range-sep {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      padding-top: 0.5rem;
+    }
+
+    /* ── Image slots ── */
+    .image-slot {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .image-slot:first-child { padding-top: 0; }
+    .image-slot:last-child { border-bottom: none; padding-bottom: 0; }
+    .slot-preview {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slot-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .slot-preview-empty {
+      font-size: 1.2rem;
+      opacity: 0.2;
+    }
+    .slot-info { flex: 1; }
+    .slot-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+    .slot-actions { display: flex; gap: 0.5rem; align-items: center; }
+    .btn-upload {
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: inherit;
+      background: var(--gradient);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.4rem 0.875rem;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-upload:hover { opacity: 0.85; }
+    .btn-remove {
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: inherit;
+      background: none;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.4rem 0.875rem;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .btn-remove:hover { color: #ff5555; border-color: rgba(255,85,85,0.3); }
+
+    /* ── Slideshow grid ── */
+    .slideshow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+    .slideshow-thumb {
+      aspect-ratio: 9/16;
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+    }
+    .slideshow-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .slideshow-num {
+      position: absolute;
+      bottom: 4px;
+      left: 5px;
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.5);
+    }
+    .slideshow-delete {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 18px;
+      height: 18px;
+      background: rgba(0,0,0,0.6);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.7);
+    }
+    .btn-add-slideshow {
+      font-size: 0.8rem;
+      font-weight: 600;
+      font-family: inherit;
+      background: var(--gradient);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 0.55rem 1.1rem;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .btn-add-slideshow:hover { opacity: 0.85; }
+
+    /* ── Actions ── */
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .btn-back {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: color 0.15s;
+    }
+    .btn-back:hover { color: var(--text); }
+    .btn-update {
+      background: var(--gradient);
+      color: white;
+      font-weight: 700;
+      font-size: 0.95rem;
+      font-family: inherit;
+      border: none;
+      border-radius: 12px;
+      padding: 0.75rem 2.5rem;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-update:hover { opacity: 0.88; }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0.25rem 0;
+    }
+
+    @media (max-width: 480px) {
+      .field-row { grid-template-columns: 1fr auto 1fr; align-items: center; }
+      .range-sep { padding-top: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <nav class="topbar">
+    <a href="/" class="topbar-wordmark">
+      offfscript
+      <span class="topbar-descriptor">creator monetization &amp; growth</span>
+    </a>
+    <button class="btn-signout">Sign out</button>
+  </nav>
+
+  <div class="page">
+
+    <p class="page-eyebrow">Creator platform admin</p>
+    <div class="page-title">Edit StoryDrop</div>
+    <p class="page-desc">Update pricing, audience reach, story impressions, and creative assets for this creator profile.</p>
+
+    <!-- Profile settings -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Profile settings</span>
+      </div>
+      <div class="card-body">
+
+        <div class="field">
+          <label class="field-label">Instagram handle</label>
+          <input type="text" class="input" value="joyraftdc" placeholder="handle">
+          <div class="field-hint">Without the @ symbol</div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Price (dollars)</label>
+          <div class="input-prefix-wrap">
+            <span class="input-prefix">$</span>
+            <input type="number" class="input" value="50" min="1" style="padding-left:1.6rem;">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Follower count (K)</label>
+          <input type="text" class="input" value="39" placeholder="e.g. 39">
+          <div class="field-hint">Displayed as "39k+" on the booking page</div>
+        </div>
+
+        <div class="field">
+          <div class="field-row-label">Story impressions range (K)</div>
+          <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:0.5rem;align-items:center;">
+            <input type="text" class="input" value="1" placeholder="Min">
+            <span style="font-size:0.75rem;color:var(--muted);text-align:center;">to</span>
+            <input type="text" class="input" value="2" placeholder="Max">
+          </div>
+          <div class="field-hint">Displayed as "1–2k+ impressions/frame"</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Reach copy -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Reach section copy</span>
+      </div>
+      <div class="card-body">
+
+        <div class="field">
+          <label class="field-label">Reach title</label>
+          <input type="text" class="input" value="Reach one of DC's most engaged audiences">
+        </div>
+
+        <div class="field">
+          <label class="field-label">Reach description</label>
+          <textarea class="input" rows="4">@joyraftdc's story averages 1.2k views per frame. While view counts vary, we leverage a proven method to maximize story views and engagement for our customers. View sample metrics, demographics, and stories below.</textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Main images -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Main images</span>
+        <span class="card-badge">4 slots</span>
+      </div>
+      <div class="card-body">
+
+        <div class="image-slot">
+          <div class="slot-preview">
+            <img src="/joyraftdc-avatar.jpg" alt="IG handle image">
+          </div>
+          <div class="slot-info">
+            <div class="slot-label">IG handle image</div>
+            <div class="slot-actions">
+              <button class="btn-upload">Upload</button>
+              <button class="btn-remove">Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="image-slot">
+          <div class="slot-preview">
+            <div class="slot-preview-empty">📱</div>
+          </div>
+          <div class="slot-info">
+            <div class="slot-label">Image 1 — Phone mockup hero</div>
+            <div class="slot-actions">
+              <button class="btn-upload">Upload</button>
+              <button class="btn-remove">Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="image-slot">
+          <div class="slot-preview">
+            <div class="slot-preview-empty">📊</div>
+          </div>
+          <div class="slot-info">
+            <div class="slot-label">Image 2 — Metrics screenshot</div>
+            <div class="slot-actions">
+              <button class="btn-upload">Upload</button>
+              <button class="btn-remove">Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="image-slot">
+          <div class="slot-preview">
+            <div class="slot-preview-empty">🖼</div>
+          </div>
+          <div class="slot-info">
+            <div class="slot-label">Image 3 — Sample ad creative</div>
+            <div class="slot-actions">
+              <button class="btn-upload">Upload</button>
+              <button class="btn-remove">Remove</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Slideshow -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Past stories slideshow</span>
+        <span class="card-badge">max 6</span>
+      </div>
+      <div class="card-body">
+        <button class="btn-add-slideshow">＋ Add slideshow images</button>
+        <div class="slideshow-grid">
+          <div class="slideshow-thumb">
+            <div style="width:100%;height:100%;background:linear-gradient(160deg,#1a0030,#0d001a);display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:rgba(255,255,255,0.2);letter-spacing:0.05em;text-transform:uppercase;padding:0.5rem;text-align:center;">Story #1</div>
+            <span class="slideshow-num">#1</span>
+            <button class="slideshow-delete">✕</button>
+          </div>
+          <div class="slideshow-thumb">
+            <div style="width:100%;height:100%;background:linear-gradient(160deg,#001a1a,#0d000d);display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:rgba(255,255,255,0.2);letter-spacing:0.05em;text-transform:uppercase;padding:0.5rem;text-align:center;">Story #2</div>
+            <span class="slideshow-num">#2</span>
+            <button class="slideshow-delete">✕</button>
+          </div>
+          <div class="slideshow-thumb">
+            <div style="width:100%;height:100%;background:linear-gradient(160deg,#001a08,#0d000d);display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:rgba(255,255,255,0.2);letter-spacing:0.05em;text-transform:uppercase;padding:0.5rem;text-align:center;">Story #3</div>
+            <span class="slideshow-num">#3</span>
+            <button class="slideshow-delete">✕</button>
+          </div>
+          <div class="slideshow-thumb" style="border-style:dashed;display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:1.2rem;opacity:0.15;">+</span>
+          </div>
+          <div class="slideshow-thumb" style="border-style:dashed;display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:1.2rem;opacity:0.15;">+</span>
+          </div>
+          <div class="slideshow-thumb" style="border-style:dashed;display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:1.2rem;opacity:0.15;">+</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <a href="../" class="btn-back">← Back</a>
+      <button class="btn-update">Update</button>
+    </div>
+
+  </div>
+
+</body>
+</html>
